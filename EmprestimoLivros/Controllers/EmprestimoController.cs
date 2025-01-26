@@ -11,9 +11,9 @@ namespace EmprestimoLivros.Controllers
 
         public EmprestimoController(AppDbContext dbContext) => _context = dbContext;
        
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            IEnumerable<EmprestimosModel> resultado = await _context.emprestimos.ToListAsync();
+            IEnumerable<EmprestimosModel> resultado =  _context.emprestimos;
             return View(resultado);
         }
     }
