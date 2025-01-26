@@ -1,0 +1,44 @@
+﻿@model IEnumerable<EmprestimoLivros.Models.EmprestimosModel>
+
+@{
+    ViewData["title"] = "index";
+}
+
+
+
+<div>
+
+    <div> 
+        <h1>Empréstimos</h1>
+        <button>Cadastrar novo Empréstimo</button>
+    </div>
+        <div>
+            <table class="table table-hover">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Recebedor</th>
+                            <th scope="col">Fornecedor</th>
+                            <th scope="col">Livro Emprestado</th>
+                            <th scope="col">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var emprestimos in Model)
+                        {
+                            <tr>
+                                <th scope="row">@emprestimos.Fornecedor</th>
+                                <td>@emprestimos.Fornecedor</td>
+                                <td>@emprestimos.LivroEmprestado</td>
+                                <td>@emprestimos.DataUltimaAtualizacao</td>
+                            </tr>
+                        }
+                    }
+
+                    </tbody>
+                </table>
+            </table>
+        </div>
+</div>
