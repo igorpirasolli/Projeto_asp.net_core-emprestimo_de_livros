@@ -9,10 +9,24 @@
 
     <div class="d-flex justify-content-between align-items-center mb-5">
         <h1>Empréstimos</h1>
-        <a class="btn btn-success mx-2" asp-controller="Emprestimo" asp-action="Create">Cadastrar novo empréstimo</a>
+        <a class="btn btn-success mx-2" asp-controller="Emprestimo" asp-action="Create"><i class="bi bi-file-earmark-plus mx-2"></i>Cadastrar novo empréstimo</a>
     </div>
 
-    <table class="table table-dark table-hover">
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success text-light" role="alert">
+            @TempData["MensagemSucesso"]
+        </div>
+    }
+
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger text-light" role="alert">
+            @TempData["MensagemErro"]
+        </div>
+    }
+
+    <table id="Emprestimos" class="table table-light table-hover mt-5">
         <thead>
             <tr>
                 <th scope="col">Recebedor</th>
@@ -25,7 +39,7 @@
         <tbody>
             @if (Model != null)
             {
-                @foreach(var emprestimos in Model)
+                @foreach (var emprestimos in Model)
                 {
                     <tr>
                         <th scope="row">@emprestimos.Recebedor</th>
@@ -33,8 +47,8 @@
                         <td>@emprestimos.LivroEmprestado</td>
                         <td>@emprestimos.DataUltimaAtualizacao.ToString("dd/MM/yyyy")</td>
                         <td>
-                            <a class="btn btn-warning mx-2" asp-controller="Emprestimo" asp-action="Edit" asp-route-id="@emprestimos.Id">Editar</a>
-                            <a class="btn btn-danger mx-2" asp-controller="Emprestimo" asp-action="Delete" asp-route-id="@emprestimos.Id">Excluir</a>
+                            <a class="btn btn-warning mx-2" asp-controller="Emprestimo" asp-action="Edit" asp-route-id="@emprestimos.Id"><i class="bi bi-pencil-square mx-2"></i>Editar</a>
+                            <a class="btn btn-danger mx-2" asp-controller="Emprestimo" asp-action="Delete" asp-route-id="@emprestimos.Id"><i class="bi bi-trash3 mx-2"></i>Excluir</a>
                         </td>
                     </tr>
                 }
