@@ -1,10 +1,16 @@
 using EmprestimoLivros.Data;
+using EmprestimoLivros.Services.LoginService;
+using EmprestimoLivros.Services.SenhaService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ISenhainterface, SenhaService>();
+
+builder.Services.AddScoped<ILoginInterface, LoginService>();
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
