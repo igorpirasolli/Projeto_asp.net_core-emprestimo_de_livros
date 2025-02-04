@@ -11,6 +11,8 @@ namespace EmprestimoLivros.Data
 
         public DbSet<EmprestimosModel> emprestimos { get; set; }
 
+        public DbSet<UsuarioModel> usuario { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EmprestimosModel>().HasData(
