@@ -1,21 +1,29 @@
 using EmprestimoLivros.Data;
 using EmprestimoLivros.Services.LoginService;
 using EmprestimoLivros.Services.SenhaService;
+using EmprestimoLivros.Services.SessaoService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ISessaoInterface, SessaoService>();
 builder.Services.AddScoped<ISenhainterface, SenhaService>();
-
 builder.Services.AddScoped<ILoginInterface, LoginService>();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
 
 var app = builder.Build();
 
@@ -34,8 +42,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Login}/{id?}");
 
 app.Run();

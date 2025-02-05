@@ -6,6 +6,7 @@ using EmprestimoLivros.Data;
 using EmprestimoLivros.Dto;
 using EmprestimoLivros.Models;
 using EmprestimoLivros.Services.SenhaService;
+using EmprestimoLivros.Services.SessaoService;
 
 namespace EmprestimoLivros.Services.LoginService
 {
@@ -13,12 +14,53 @@ namespace EmprestimoLivros.Services.LoginService
     {
         private readonly AppDbContext _appDbContext;
         private readonly ISenhainterface _senhainterface;
+        private readonly ISessaoInterface _sessaoInterface;
 
-        public LoginService(AppDbContext appDbContext, ISenhainterface senhainterface)
+        public LoginService(AppDbContext appDbContext, ISenhainterface senhainterface, ISessaoInterface sessaoInterface)
         {
             _appDbContext = appDbContext;
             _senhainterface = senhainterface;
+            _sessaoInterface = sessaoInterface;
         }
+
+        public async Task<ResponseModel<UsuarioLoginDto>> Login(UsuarioLoginDto loginDto)
+        {
+            ResponseModel<UsuarioLoginDto> response = new ResponseModel<UsuarioLoginDto>();
+
+            try
+            {
+
+                var usuario =  _appDbContext.usuario.FirstOrDefault(x => x.Email == loginDto.Email);
+
+                if (usuario == null)
+                {
+                    response.Mensagem = "Credenciais inválidas!";
+                    response.Status = false;
+                    return response;
+                }
+
+                if(!_senhainterface.VerificaSenha(loginDto.Senha, usuario.SenhaHash, usuario.SenhaSalt))
+                {
+                    response.Mensagem = "Senha incorreta!";
+                    response.Status = false;
+                    return response;
+                }
+
+                //Criar sessão
+                _sessaoInterface.CriarSessao(usuario);
+
+                response.Mensagem = "Você esta Logado!";
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+        }
+
         public async Task<ResponseModel<UsuarioModel>> Registrar(UsuarioRegisterDto registerDto)
         {
             ResponseModel<UsuarioModel> responseModel = new ResponseModel<UsuarioModel>();
